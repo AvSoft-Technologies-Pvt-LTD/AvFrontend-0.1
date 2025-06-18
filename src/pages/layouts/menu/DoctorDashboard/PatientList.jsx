@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, Plus, Loader2, Edit } from "lucide-react";
@@ -37,6 +35,8 @@ const API = {
   FD: "https://6808fb0f942707d722e09f1d.mockapi.io/FamilyData",
   HS: "https://6808fb0f942707d722e09f1d.mockapi.io/health-summary",
 };
+
+
 const getDate = () => new Date().toISOString().slice(0, 10);
 const getTime = () => new Date().toTimeString().slice(0, 5);
 const to24Hour = t => {
@@ -560,37 +560,66 @@ useEffect(() => { (async () => { try { const res = await axios.get("https://684b
                     {["ID", "Name", "Admission", "Status", "Diagnosis", "Ward", "Discharge", "Actions"].map(h => (<th key={h} className="px-3 py-3">{h}</th>))}
                   </tr>
                 </thead>
-                <tbody className="table-body text-xs">
-                  {ipdState.filteredIPD.filter(p => (p.type || "").toLowerCase() === "ipd").map(p => (
-                    <tr key={p.id} className={`tr-style text-center hover:bg-gray-50 ${recentPatientId === p.id ? "blink-row font-extrabold" : ""}`}>
-                      <td className="px-2 py-1">{p.id}</td>
-                      <td className="px-2 py-1">
-                        <button className="cursor-pointer text-[var(--primary-color)] hover:text-[var(--accent-color)]" onClick={() => viewIpdPatientDetails(p)}>
-                          {p.name || `${p.firstName || ""} ${p.middleName || ""} ${p.lastName || ""}`.replace(/\s+/g, " ").trim()}
-                        </button>
-                      </td>
-                      <td className="px-2 py-1">{p.admissionDate}</td>
-                      <td className="px-2 py-1">
-                        <span className={`status-badge ${p.status === "Admitted" ? "status-admitted" : p.status === "Under Treatment" ? "status-pending" : "status-discharged"}`}>{p.status}</span>
-                      </td>
-                      <td className="px-2 py-1">{p.diagnosis}</td>
-                      <td className="px-2 py-1">{[p.wardType, p.wardNo, p.bedNo].filter(Boolean).join("-")}</td>
-                      <td className="px-2 py-1">{p.dischargeDate || "-"}</td>
-                    <div className="flex items-center gap-3">
-              <button onClick={() => handleAddRecord(p)} className="edit-btn">
-                Add Record
-              </button>
-              <TeleConsultFlow phone={p.phone} />
-            </div>
-                    </tr>
-                  ))}
-                  {ipdState.filteredIPD.filter(p => (p.type || "").toLowerCase() === "ipd").length === 0 && (
-                    <tr>
-                      <td colSpan={8} className="py-4 text-gray-400 text-center text-xs">No patients found.</td>
-                    </tr>
-                  )}
-                </tbody>
+            <tbody className="table-body text-xs">
+  {paginatedIPD.map(p => (
+<tr
+  key={p.id}
+  className={`tr-style text-center hover:bg-gray-50 ${recentPatientId === p.id ? "blink-row font-extrabold" : ""}`}
+  onMouseEnter={() => recentPatientId === p.id && setRecentPatientId(null)}
+>      <td className="px-2 py-1">{p.id}</td>
+      <td className="px-2 py-1">
+        <button
+          className="cursor-pointer text-[var(--primary-color)] hover:text-[var(--accent-color)]"
+          onClick={() => viewIpdPatientDetails(p)}
+        >
+          {p.name || `${p.firstName || ""} ${p.middleName || ""} ${p.lastName || ""}`.replace(/\s+/g, " ").trim()}
+        </button>
+      </td>
+      <td className="px-2 py-1">{p.admissionDate}</td>
+      <td className="px-2 py-1">
+        <span className={`status-badge ${p.status === "Admitted" ? "status-admitted" : p.status === "Under Treatment" ? "status-pending" : "status-discharged"}`}>{p.status}</span>
+      </td>
+      <td className="px-2 py-1">{p.diagnosis}</td>
+      <td className="px-2 py-1">{[p.wardType, p.wardNo, p.bedNo].filter(Boolean).join("-")}</td>
+      <td className="px-2 py-1">{p.dischargeDate || "-"}</td>
+      <td className="px-2 py-1">
+        <div className="flex items-center gap-3">
+          <button onClick={() => handleAddRecord(p)} className="edit-btn">
+            Add Record
+          </button>
+          <TeleConsultFlow phone={p.phone} />
+        </div>
+      </td>
+    </tr>
+  ))}
+  {paginatedIPD.length === 0 && (
+    <tr>
+      <td colSpan={8} className="py-4 text-gray-400 text-center text-xs">No patients found.</td>
+    </tr>
+  )}
+</tbody>
               </table>
+              <div className="flex justify-end items-center mt-4">
+  <div className="flex items-center gap-2">
+    <button
+      disabled={ipdPage === 1}
+      onClick={() => setIpdPage((prev) => prev - 1)}
+      className={`edit-btn ${ipdPage === 1 ? "opacity-50 cursor-not-allowed" : ""}`}
+    >
+      Previous
+    </button>
+    <span>
+      Page {ipdPage} of {ipdTotalPages || 1}
+    </span>
+    <button
+      disabled={ipdPage === ipdTotalPages || ipdTotalPages === 0}
+      onClick={() => setIpdPage((prev) => prev + 1)}
+      className={`edit-btn ${ipdPage === ipdTotalPages || ipdTotalPages === 0 ? "opacity-50 cursor-not-allowed" : ""}`}
+    >
+      Next
+    </button>
+  </div>
+</div>
             </div>
           </div>
         </div>
@@ -617,20 +646,28 @@ useEffect(() => { (async () => { try { const res = await axios.get("https://684b
                 </div>
                 <button type="button" onClick={fetchPatient} className="animate-pulse-save text-white px-4 text-sm py-2 rounded self-end md:self-auto" style={{ backgroundColor: "var(--primary-color)" }}>Get Patient Details</button>
               </div>
+              {/* Name fields */}
               <div className="grid md:grid-cols-3 gap-x-4 gap-y-4">
-                {renderFields(FIELDS.slice(0, 3), ipdState.formData, F, ipdErrors, ipdState.occList, v => S("occList", v))}
+                {renderFields(FIELDS.slice(0, 2), ipdState.formData, F, ipdErrors, ipdState.occList, v => S("occList", v))}
+                {renderFields(FIELDS.slice(2, 3), ipdState.formData, F, ipdErrors, ipdState.occList, v => S("occList", v))}
               </div>
+              {/* Phone, Email, Gender */}
               <div className="grid md:grid-cols-3 gap-x-4 gap-y-4">
                 {renderFields(FIELDS.slice(3, 6), ipdState.formData, F, ipdErrors, ipdState.occList, v => S("occList", v))}
               </div>
+              {/* DOB, Blood Group, Occupation (Occupation beside Blood Group) */}
               <div className="grid md:grid-cols-3 gap-x-4 gap-y-4">
-                {renderFields(FIELDS.slice(6, 9), ipdState.formData, F, ipdErrors, ipdState.occList, v => S("occList", v))}
+                {renderFields(FIELDS.slice(6, 7), ipdState.formData, F, ipdErrors, ipdState.occList, v => S("occList", v))}
+                {renderFields(FIELDS.slice(7, 8), ipdState.formData, F, ipdErrors, ipdState.occList, v => S("occList", v))}
+                {renderFields(FIELDS.slice(12, 13), ipdState.formData, F, ipdErrors, ipdState.occList, v => S("occList", v))}
               </div>
+              {/* Permanent and Temporary Address below that */}
               <div className="grid md:grid-cols-2 gap-x-4 gap-y-4">
-                {renderFields(FIELDS.slice(9, 11), ipdState.formData, F, ipdErrors, ipdState.occList, v => S("occList", v))}
+                {renderFields(FIELDS.slice(8, 10), ipdState.formData, F, ipdErrors, ipdState.occList, v => S("occList", v))}
               </div>
+              {/* Password and Confirm Password below addresses */}
               <div className="grid md:grid-cols-2 gap-x-4 gap-y-4">
-                {renderFields(FIELDS.slice(11, 13), ipdState.formData, F, ipdErrors, ipdState.occList, v => S("occList", v))}
+                {renderFields(FIELDS.slice(10, 12), ipdState.formData, F, ipdErrors, ipdState.occList, v => S("occList", v))}
               </div>
               <div>
                 <label className="font-medium block mb-1">Upload Photo</label>
@@ -682,43 +719,6 @@ useEffect(() => { (async () => { try { const res = await axios.get("https://684b
                 </button>
                 <div className="flex justify-end items-center mt-4">
 
-  <div className="flex items-center gap-2">
-
-    <button
-
-      disabled={ipdPage === 1}
-
-      onClick={() => setIpdPage((prev) => prev - 1)}
-
-      className={`edit-btn ${ipdPage === 1 ? "opacity-50 cursor-not-allowed" : ""}`}
-
-    >
-
-      Previous
-
-    </button>
-
-    <span>
-
-      Page {ipdPage} of {ipdTotalPages || 1}
-
-    </span>
-
-    <button
-
-      disabled={ipdPage === ipdTotalPages || ipdTotalPages === 0}
-
-      onClick={() => setIpdPage((prev) => prev + 1)}
-
-      className={`edit-btn ${ipdPage === ipdTotalPages || ipdTotalPages === 0 ? "opacity-50 cursor-not-allowed" : ""}`}
-
-    >
-
-      Next
-
-    </button>
-
-  </div>
 
 </div>
 
