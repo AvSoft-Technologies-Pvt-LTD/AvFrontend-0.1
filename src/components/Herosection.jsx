@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { UserRound, Users, FlaskRound as Flask, Building2, Phone, Activity, Heart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-
+import outputImage from "../assets/output.jpg";
 const Counter = ({ end, duration = 2000, label, icon: Icon, delay = 0 }) => {
   const [count, setCount] = useState(0), [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -110,8 +110,7 @@ export default function App() {
           <div className="relative w-full lg:w-1/2 aspect-square max-w-2xl">
             <div className="absolute inset-0 rounded-blob shadow-2xl overflow-hidden transform hover:scale-105 transition-all duration-500">
               <div className="absolute inset-0 bg-[var(--primary-color)]/10"></div>
-              <img src="src/assets/output.jpg" alt="Digital Healthcare" className="w-full h-full object-cover scale-in" />
-            </div>
+              <img src={outputImage} alt="Digital Healthcare" className="w-full h-full object-cover scale-in" />            </div>
           </div>
         </div>
       </div>
