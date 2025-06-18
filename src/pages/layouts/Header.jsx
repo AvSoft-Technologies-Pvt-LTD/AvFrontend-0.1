@@ -76,9 +76,9 @@ const HeaderWithNotifications = () => {
                 <div className="absolute right-0 mt-3 w-[24rem] bg-white rounded-2xl shadow-2xl border max-h-[80vh] overflow-y-auto z-50">
                   <div className="sticky top-0 bg-[var(--primary-color)] px-5 py-4 border-b flex justify-between items-center rounded-t-2xl">
                     <h3 className="text-lg font-bold text-white">Notifications</h3>
-                    {notifications.length > 2 && (<Link to="/dashboard/notifications" onClick={() => setShowNotifications(false)} className="text-sm text-[var(--accent-color)] hover:underline">View All</Link>)}
+                    {notifications.length > 2 && (<Link to="" onClick={() => setShowNotifications(false)} className="text-sm text-[var(--accent-color)] hover:underline">View All</Link>)}
                   </div>
-                  {displayNotifications.length === 0 ? (<div className="px-5 py-6 text-center text-gray-500 text-sm">You're all caught up 🎉</div>) :
+                  {displayNotifications.length === 0 ? (<div className="px-5 py-6 text-center text-gray-500 text-sm">You're all caught up </div>) :
                     displayNotifications.map(n => (
                       <div key={n.id} onClick={() => setNotifications(prev => prev.map(notif => notif.id === n.id ? { ...notif, unread: false } : notif))} className={`group px-5 py-4 border-b cursor-pointer transition ${n.unread ? 'bg-[var(--accent-color)]/20' : 'bg-white'} hover:bg-[var(--accent-color)]/10`}>
                         <div className="flex justify-between gap-3">
