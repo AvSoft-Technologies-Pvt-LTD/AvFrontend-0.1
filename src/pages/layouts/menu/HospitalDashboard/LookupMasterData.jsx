@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Plus, Edit, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import ReusableModal from "../../../../components/microcomponents/Modal";
 
 import DynamicTable from "../../../../components/microcomponents/DynamicTable";
@@ -11,7 +12,7 @@ const lookupFields = [
     label: "Lookup Type",
     type: "select",
     options: [
-      { value: "Appointment Type", label: "Appointment Type" },
+      { value: "Appointment Type", label: "Appointment Type", },
       { value: "Booking Status", label: "Booking Status" },
       { value: "Department", label: "Department" },
       { value: "Doctor Role", label: "Doctor Role" },
@@ -34,16 +35,15 @@ const lookupFields = [
 const lookupFilters = [
   {
     key: "combinedFilter",
-    label: "Filter",
-    options: lookupFields
-      .filter(field => field.type === "select" && field.options)
-      .flatMap(field =>
-        field.options.map(opt => ({
-          value: opt.value,
-          label: opt.label,
-        }))
-      ),
-  },
+    label: "Lookup Type",
+    options: [
+      { value: "Appointment Type", label: "Appointment Type" },
+      { value: "Booking Status", label: "Booking Status" },
+      { value: "Department", label: "Department" },
+      { value: "Doctor Role", label: "Doctor Role" },
+      { value: "Room Type", label: "Room Type" }
+    ]
+  }
 ];
 
 const lookupViewFields = [
@@ -68,12 +68,6 @@ const initialLookups = [
   { id: 11, type: "Room Type", value: "ICU", sort: 1, status: "Active", createdDate: "2025-07-01" },
   { id: 12, type: "Room Type", value: "General Ward", sort: 2, status: "Active", createdDate: "2025-07-01" }
 ];
-
-// Add statusColors mapping for badge styling
-const statusColors = {
-  active: "text-green-600 bg-green-100",
-  inactive: "text-red-600 bg-red-100",
-};
 
 const LookupMasterData = () => {
   const [lookupData, setLookupData] = useState(initialLookups);
@@ -111,26 +105,26 @@ const LookupMasterData = () => {
     {
       header: "Type",
       accessor: "type",
-      cell: row => (
-        <button
-          className="text-[var(--primary-color)] font-semibold hover:text-[var(--accent-color)]"
-          onClick={() => openModal("viewProfile", row)}
-        >
-          {row.type}
-        </button>
-      )
+      // cell: row => (
+      //   <button
+      //       className="text-[var(--primary-color)]  hover:text-[var(--accent-color)] underline cursor-pointer"
+      //     onClick={() => openModal("viewProfile", row)}
+      //   >
+      //     {row.type}
+      //   </button>
+      // )
     },
     {
       header: "Value",
       accessor: "value",
-      cell: row => (
-        <button
-          className="text-[var(--primary-color)] font-semibold hover:text-[var(--accent-color)]"
-          onClick={() => openModal("viewProfile", row)}
-        >
-          {row.value}
-        </button>
-      )
+      // cell: row => (
+      //   <button
+      //       className="text-[var(--primary-color)]  hover:text-[var(--accent-color)] underline cursor-pointer"
+      //     onClick={() => openModal("viewProfile", row)}
+      //   >
+      //     {row.value}
+      //   </button>
+      // )
     },
     { header: "Sort", accessor: "sort" },
     {
@@ -138,6 +132,10 @@ const LookupMasterData = () => {
       accessor: "status",
       cell: (row) => {
         const key = row.status?.toLowerCase(); // "active" or "inactive"
+        const statusColors = {
+          active: "text-green-600 bg-green-100",
+          inactive: "text-red-600 bg-red-100",
+        };
         return (
           <span className={`px-2 py-1 rounded-full text-xs font-semibold ${statusColors[key] || "text-gray-600 bg-gray-100"}`}>
             {key?.toUpperCase()}
@@ -153,17 +151,17 @@ const LookupMasterData = () => {
         <div className="flex gap-2">
           <button
             onClick={() => openModal("edit", row)}
-            className="edit-btn"
+            className="edit-btn hover:bg-blue-100 rounded p-1 transition hover:animate-bounce"
             title="Edit"
           >
-            <Edit size={16} />
+            <FaEdit size={16} />
           </button>
           <button
             onClick={() => openModal("confirmDelete", row)}
-            className="delete-btn"
+            className="delete-btn  hover:bg-blue-100 rounded p-1 transition hover:animate-bounce"
             title="Delete"
           >
-            <Trash2 size={16} />
+            <FaTrash size={16} />
           </button>
         </div>
       )
@@ -171,9 +169,10 @@ const LookupMasterData = () => {
   ];
 
   return (
-    <div>
-      <div className="max-w-6xl mx-auto">
-        <div className="flex justify-end items-center mb-6">
+    <div className="min-h-screen pt-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-6 flex justify-between items-center">
+          <h1 className="h4-heading">Lookup Master Data</h1>
           <button
             onClick={() => openModal("add")}
             className="btn btn-primary flex items-center gap-2"
@@ -181,32 +180,18 @@ const LookupMasterData = () => {
             <Plus size={20} /> Add Lookup Value
           </button>
         </div>
-
-        <div className="">
-          <DynamicTable columns={lookupColumns} data={lookupData} filters={lookupFilters} />
-        </div>
+        <DynamicTable columns={lookupColumns} data={lookupData} filters={lookupFilters} />
+        {/* Modal rendering logic */}
+        <ReusableModal
+          isOpen={modalState.isOpen}
+          onClose={closeModal}
+          mode={modalState.mode}
+          fields={lookupFields}
+          data={modalState.data}
+          onSave={handleSave}
+          onDelete={handleDelete}
+        />
       </div>
-
-      <ReusableModal
-        isOpen={modalState.isOpen}
-        onClose={closeModal}
-        mode={modalState.mode}
-        title={
-          modalState.mode === "add"
-            ? "Add Lookup Value"
-            : modalState.mode === "edit"
-            ? "Edit Lookup Value"
-            : modalState.mode === "viewProfile"
-            ? "Lookup Details"
-            : "Confirm Delete"
-        }
-        data={modalState.data}
-        fields={lookupFields}
-        viewFields={lookupViewFields}
-        onSave={handleSave}
-        onDelete={handleDelete}
-        size="lg"
-      />
     </div>
   );
 };

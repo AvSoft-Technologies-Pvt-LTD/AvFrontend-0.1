@@ -4,13 +4,16 @@ import {
   TestTube,
   Settings,
   FileText,
-  Edit,
-  Trash2,
+ 
+
   Eye,
 } from "lucide-react";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import ReusableModal from "../../../../components/microcomponents/Modal";
 import DynamicTable from "../../../../components/microcomponents/DynamicTable";
 import TemplateModal from "./TemplateModal";
+import SignatureCanvas from "react-signature-canvas";
+import { Save, X as XIcon } from "lucide-react";
 
 const LabSettings = () => {
   // Group all state and handlers in a custom hook for brevity
@@ -25,6 +28,7 @@ const LabSettings = () => {
       isOpen: false,
       template: null,
     });
+    const signaturePadRef = React.useRef();
 
     // Mock Data
     const [labItems, setLabItems] = useState([
@@ -203,6 +207,7 @@ const LabSettings = () => {
       { name: "headerColor", label: "Header Color", type: "color" },
       { name: "logoUrl", label: "Logo URL", type: "url" },
       { name: "logoFile", label: "Lab Logo (Upload)", type: "file" },
+       { name: "Dr Sign", label: "Dr Sign(Upload)", type: "file" },
     ];
 
     // Filter Configurations
@@ -214,34 +219,28 @@ const LabSettings = () => {
     const uniqueStatuses = [...new Set(labItems.map(item => item.status))];
     const uniqueReportFormats = [...new Set(labItems.map(item => item.reportFormat))];
 
-    const labItemsFilters = [
-      {
-        key: "combinedFilter",
-        label: "Filter",
-        options: labItemsFields
-          .filter(field => field.type === "select" && field.options)
-          .flatMap(field =>
-            field.options.map(opt => ({
-              value: opt.value,
-              label: opt.label,
-            }))
-          ),
-      },
-    ];
-    const testParametersFilters = [
-      {
-        key: "combinedFilter",
-        label: "Lookup",
-        options: testParametersFields
-          .filter(field => field.type === "select" && field.options)
-          .flatMap(field =>
-            field.options.map(opt => ({
-              value: opt.value,
-              label: opt.label,
-            }))
-          ),
-      },
-    ];
+   const labItemsFilters = [
+  {
+    key: "combinedFilter",
+    label: "Category",
+    options: [...new Set(labItems.map(item => item.category))].map(category => ({
+      value: category,
+      label: category,
+    })),
+  },
+];
+
+   const testParametersFilters = [
+  {
+    key: "combinedFilter",
+    label: "Lookup Value",
+    options: [...new Set(testParameters.map(p => p.lookupValue))].map(value => ({
+      value,
+      label: value,
+    })),
+  },
+];
+
     const templatesFilters = [
       {
         key: "combinedFilter",
@@ -265,7 +264,21 @@ const LabSettings = () => {
 
     const labItemsColumns = [
       { header: "Item Code", accessor: "itemCode" },
-      { header: "Test Name", accessor: "testName" },
+   {
+  header: "Test Name",
+  accessor: "testName",
+  cell: (row) => (
+    <button
+      type="button"
+      className="text-[var(--primary-color)]  hover:text-[var(--accent-color)] underline cursor-pointer"
+      onClick={() => logic.handleViewItem(row)}
+      title="View Lab Item"
+    >
+      {row.testName}
+    </button>
+  ),
+},
+
       { header: "Category", accessor: "category" },
       { header: "Specimen Type", accessor: "specimenType" },
       {
@@ -280,7 +293,7 @@ const LabSettings = () => {
           const key = row.status ? row.status.toLowerCase() : "";
           return (
             <span
-              className={`px-2 py-1 rounded-full text-xs font-semibold ${
+              className={`px-2 py-1 rounded-full text-xs  ${
                 statusColors[key] || "text-gray-600 bg-gray-100"
               }`}
             >
@@ -300,14 +313,14 @@ const LabSettings = () => {
               className="edit-btn flex items-center justify-center hover:bg-blue-100 rounded p-1 transition hover:animate-bounce"
               title="Edit"
             >
-              <Edit size={16} />
+              <FaEdit size={16} />
             </button>
             <button
               onClick={() => handleDeleteItem(row)}
               className="delete-btn flex items-center justify-center hover:bg-red-100 rounded p-1 transition hover:animate-bounce"
               title="Delete"
             >
-              <Trash2 size={16} />
+              <FaTrash size={16} />
             </button>
           </div>
         ),
@@ -315,13 +328,26 @@ const LabSettings = () => {
     ];
     const testParametersColumns = [
       { header: "Seq No", accessor: "seqNo" },
-      { header: "Parameter Name", accessor: "parameterName" },
+    {
+  header: "Parameter Name",
+  accessor: "parameterName",
+  cell: (row) => (
+    <button
+      type="button"
+      className="text-[var(--primary-color)] hover:text-[var(--accent-color)] underline cursor-pointer"
+      onClick={() => logic.handleViewParameter(row)}
+      title="View Parameter"
+    >
+      {row.parameterName}
+    </button>
+  ),
+},
+
       { header: "Unit Name", accessor: "unitName" },
       { header: "Min Value", accessor: "minValue" },
       { header: "Max Value", accessor: "maxValue" },
       { header: "Lookup Value", accessor: "lookupValue" },
       { header: "Remarks", accessor: "remarks" },
-      { header: "Default Value", accessor: "defaultValue" },
       {
         header: "Actions",
         accessor: "actions",
@@ -332,14 +358,14 @@ const LabSettings = () => {
               className="edit-btn flex items-center justify-center hover:bg-blue-100 rounded p-1 transition hover:animate-bounce"
               title="Edit"
             >
-              <Edit size={16} />
+              <FaEdit size={16} />
             </button>
             <button
               onClick={() => handleDeleteParameter(row)}
               className="delete-btn flex items-center justify-center hover:bg-red-100 rounded p-1 transition hover:animate-bounce"
               title="Delete"
             >
-              <Trash2 size={16} />
+              <FaTrash size={16} />
             </button>
           </div>
         ),
@@ -352,7 +378,7 @@ const LabSettings = () => {
         cell: (row) => (
           <button
             type="button"
-            className="text-[var(--primary-color)] font-semibold hover:text-[var(--accent-color)] underline cursor-pointer"
+            className="text-[var(--primary-color)] hover:text-[var(--accent-color)] underline cursor-pointer"
             onClick={() => setTemplateModalState({ isOpen: true, template: row })}
             title="View Template"
           >
@@ -373,14 +399,14 @@ const LabSettings = () => {
               className="edit-btn flex items-center justify-center hover:bg-blue-100 rounded p-1 transition hover:animate-bounce"
               title="Edit"
             >
-              <Edit size={16} />
+              <FaEdit size={16} />
             </button>
             <button
               onClick={() => handleDeleteTemplate(row)}
               className="delete-btn flex items-center justify-center hover:bg-red-100 rounded p-1 transition hover:animate-bounce"
               title="Delete"
             >
-              <Trash2 size={16} />
+              <FaTrash size={16} />
             </button>
           </div>
         ),
@@ -558,24 +584,43 @@ const LabSettings = () => {
       handleViewParameter, handleEditParameter, handleDeleteParameter,
       handleViewTemplate, handleEditTemplate, handleDeleteTemplate,
       handleSave, handleDelete, closeModal, closeTemplateModal,
-      viewFields, parameterViewFields, templateViewFields, tabs, getTabContent, currentTab
+      viewFields, parameterViewFields, templateViewFields, tabs, getTabContent, currentTab,
+      signaturePadRef,
     };
   };
 
   // Use the custom hook
   const logic = useLabSettingsLogic();
 
+  // Signature handlers for modal
+  const handleClearSignature = () => {
+    if (logic.signaturePadRef && logic.signaturePadRef.current) {
+      logic.signaturePadRef.current.clear();
+    }
+  };
+  const handleSaveSignature = () => {
+    if (logic.signaturePadRef && logic.signaturePadRef.current && !logic.signaturePadRef.current.isEmpty()) {
+      const dataUrl = logic.signaturePadRef.current.getTrimmedCanvas().toDataURL("image/png");
+      // You can use dataUrl as needed (e.g., send to backend or display)
+      alert("Signature saved! (Base64 PNG in dataUrl)");
+    } else {
+      alert("Please provide a signature before saving.");
+    }
+  };
+
   return (
-    <div className="min-h-screen  p-6">
+    <div className="min-h-screen pt-6">
       <div className="max-w-7xl mx-auto">
+          <h1 className="h4-heading mb-4">Lab Setting</h1>
         <div className="mb-6">
+          
           <div className="flex justify-between items-center">
             <div className="flex gap-2">
               {logic.tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => logic.setActiveTab(tab.id)}
-                  className={`btn w-56 h-12 flex items-center gap-2 justify-center transition-all duration-200
+                  className={`btn btn-primary flex items-center gap-2 justify-center transition-all duration-200
           ${logic.activeTab === tab.id
             ? 'btn-primary scale-105 shadow-lg'
             : 'btn-secondary hover:scale-105 hover:shadow-md hover:bg-[--primary-color]/10'
@@ -649,7 +694,32 @@ const LabSettings = () => {
         onSave={logic.handleSave}
         onDelete={logic.handleDelete}
         size="lg"
-      />
+      >
+        {/* Signature Canvas only for create-templates tab, add/edit mode */}
+        {logic.activeTab === "create-templates" && ["add", "edit"].includes(logic.modalState.mode) && (
+          <div className="mt-6">
+            <label className="block mb-2 font-medium text-gray-700">Doctor Signature</label>
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 bg-white">
+              <SignatureCanvas
+                ref={logic.signaturePadRef}
+                canvasProps={{
+                  width: 400,
+                  height: 100,
+                  className: "border border-gray-300 rounded-lg shadow-sm w-full bg-white",
+                }}
+              />
+            </div>
+            <div className="flex gap-3 mt-2 justify-end">
+              <button className="btn btn-primary" type="button" onClick={handleSaveSignature}>
+                <Save className="w-4 h-4" />Save
+              </button>
+              <button className="btn-secondary" type="button" onClick={handleClearSignature}>
+                <XIcon className="w-4 h-4" />Clear
+              </button>
+            </div>
+          </div>
+        )}
+      </ReusableModal>
       <TemplateModal
         isOpen={logic.templateModalState.isOpen}
         onClose={logic.closeTemplateModal}

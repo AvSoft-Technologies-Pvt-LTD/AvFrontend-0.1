@@ -113,7 +113,7 @@ export default function BedroomCategory() {
         }
         if (f.name === 'status') {
           return (
-            <span className={`px-2 py-1 text-xs rounded-full font-semibold ${displayVal === 'Active'
+            <span className={`px-2 py-1 text-xs rounded-full uppercase ${displayVal === 'Active'
               ? 'bg-green-100 text-green-700'
               : 'bg-red-100 text-red-700'}`}>
               {displayVal}

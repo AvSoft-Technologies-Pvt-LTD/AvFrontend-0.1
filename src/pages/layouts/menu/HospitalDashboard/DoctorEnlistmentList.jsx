@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import { Plus, Edit, Trash2, User, Stethoscope, Award, FileText } from "lucide-react";
 import ReusableModal from "../../../../components/microcomponents/Modal";
 import DynamicTable from "../../../../components/microcomponents/DynamicTable";
@@ -9,9 +10,9 @@ const doctorFilters = [
     key: "combinedFilter",
     label: "Filter",
     options: [
-      ...["Active", "Inactive"].map(status => ({ value: status, label: `Status: ${status}` })),
-      ...["Cardiology", "Medicine", "Surgery", "Pediatrics"].map(dep => ({ value: dep, label: `Department: ${dep}` })),
-      ...["Professor & Doctor", "Doctor", "Consultant", "Assistant Doctor"].map(des => ({ value: des, label: `Designation: ${des}` }))
+      // ...["Active", "Inactive"].map(status => ({ value: status, label: `Status: ${status}` })),
+      ...["Cardiology", "Medicine", "Surgery", "Pediatrics"].map(dep => ({ value: dep, label: ` ${dep}` })),
+      // ...["Professor & Doctor", "Doctor", "Consultant", "Assistant Doctor"].map(des => ({ value: des, label: `Designation: ${des}` }))
     ]
   }
 ];
@@ -204,7 +205,7 @@ const handleSave = (formData) => {
       cell: (row) => (
         <button
           type="button"
-          className="text-[var(--primary-color)] font-semibold hover:text-[var(--accent-color)] underline cursor-pointer"
+          className="text-[var(--primary-color)] hover:text-[var(--accent-color)] underline cursor-pointer"
           onClick={() => openModal("viewProfile", "doctor", row)}
           title="View Doctor"
         >
@@ -238,7 +239,22 @@ const handleSave = (formData) => {
         </span>
       ),
     },
-    { header: "Status", accessor: "status" },
+    {
+      header: "Status",
+      accessor: "status",
+      cell: (row) => {
+        const key = row.status?.toLowerCase(); // "active" or "inactive"
+        const statusColors = {
+          active: "text-green-600 bg-green-100",
+          inactive: "text-red-600 bg-red-100",
+        };
+        return (
+          <span className={`px-2 py-1 rounded-full text-xs font-semibold ${statusColors[key] || "text-gray-600 bg-gray-100"}`}>
+            {key?.toUpperCase()}
+          </span>
+        );
+      }
+    },
     {
       header: "Actions",
       accessor: "actions",
@@ -246,15 +262,15 @@ const handleSave = (formData) => {
         <div className="flex gap-2">
           <button
             onClick={() => openModal("edit", "doctor", row)}
-            className="edit-btn p-1"
+            className="edit-btn hover:bg-blue-100 rounded p-1 transition hover:animate-bounce"
           >
-            <Edit size={14} />
+            <FaEdit size={14} />
           </button>
           <button
             onClick={() => handleDelete(row.id, "doctor")}
-            className="delete-btn p-1"
+            className="delete-btn hover:bg-blue-100 rounded p-1 transition hover:animate-bounce"
           >
-            <Trash2 size={14} />
+            <FaTrash size={14} />
           </button>
         </div>
       ),
@@ -324,10 +340,10 @@ const handleSave = (formData) => {
   ];
 
   return (
-    <div className="min-h-screen p-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-6 flex justify-between items-center">
-          <h1 className="h2-heading">Doctor List</h1>
+    <div className="min-h-screen ">
+      <div className="max-w-7xl ">
+        <div className="mb-4 flex justify-between items-center">
+          <h1 className="h4-heading">Doctor List</h1>
           <div className="flex gap-3">
             {/* <button
               onClick={handleReport}

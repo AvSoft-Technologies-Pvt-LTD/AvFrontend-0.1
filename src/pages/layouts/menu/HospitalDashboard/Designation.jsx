@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Modal from "../../../../components/microcomponents/Modal";
 import DynamicTable from "../../../../components/microcomponents/DynamicTable";
 import { FaEdit, FaTrash } from "react-icons/fa";
-
 const Designation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState("add");
@@ -57,7 +56,7 @@ const Designation = () => {
   return (
     <div className="p-4 space-y-6">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="h4-heading">Departments</h1>
+        <h1 className="h4-heading">Departments & Designations</h1>
         <button onClick={() => { setMode("add"); setCurrentRow(null); setIsOpen(true); }} className="btn btn-primary">+ Create</button>
       </div>
       <DynamicTable
@@ -69,8 +68,8 @@ const Designation = () => {
           {
             header: "Actions", accessor: "actions", cell: (row) => (
               <div className="flex space-x-2">
-                <button onClick={() => handleEdit(row)} className="edit-btn hover:animate-bounce"><FaEdit className="text-[--primary-color]" /></button>
-                <button onClick={() => handleOpenDelete(row)} className="delete-btn hover:animate-bounce"><FaTrash className="text-red-500" /></button>
+                <button onClick={() => handleEdit(row)} className="edit-btn rounded p-1 transition  hover:animate-bounce"><FaEdit className="text-[--primary-color]" /></button>
+                <button onClick={() => handleOpenDelete(row)} className="delete-btn rounded p-1 transition  hover:animate-bounce"><FaTrash className="text-red-500" /></button>
               </div>
             ),
           },
@@ -80,7 +79,7 @@ const Designation = () => {
       />
       <Modal
         key={mode} isOpen={isOpen} onClose={() => setIsOpen(false)} mode={mode}
-        title={mode === "add" ? "Add New Department & Designation" : mode === "edit" ? "Edit Department & Designation" : mode === "viewProfile" ? "View Department & Designation" : "Confirm Delete"}
+        title={mode === "add" ? "Add New Department & Designation" : mode === "edit" ? "Edit Department & Designation" : mode === "viewProfile" ? " Department & Designation" : "Confirm Delete"}
         fields={combinedFields} viewFields={viewFields} data={currentRow}
         onSave={handleSave} onDelete={handleDelete} errors={formErrors}
         saveLabel={mode === "edit" ? "Update" : "Save"} deleteLabel="Yes, Delete" cancelLabel="Cancel"

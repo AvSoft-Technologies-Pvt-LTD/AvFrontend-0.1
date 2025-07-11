@@ -9,15 +9,68 @@ const Property = () => {
   const [formErrors, setFormErrors] = useState({});
   const [mode, setMode] = useState("add");
 const [propertyData, setPropertyData] = useState([
-  { id: 1, headName: "COST_CENTER_VOUCHER", headValue: "f dsjfdk gfk fgkgf gjmmf,g" },
-  { id: 2, headName: "INDIVIDUAL_SALARY_SYSTEMS", headValue: "Robi Corporate Hospital System, 58/10, 5th floor, Free School Street, Panthapath, Kalabagan, Dhaka" },
-  { id: 3, headName: "ALLOW_EDIT_AFTER_APPROVE", headValue: "true" },
-  { id: 4, headName: "MAX_LOGIN_ATTEMPTS", headValue: "5" },
-  { id: 5, headName: "ENABLE_EMAIL_NOTIFICATION", headValue: "false" },
-  { id: 6, headName: "PAYROLL_CYCLE", headValue: "Monthly" },
-  { id: 7, headName: "DEFAULT_CURRENCY", headValue: "BDT" },
-  { id: 8, headName: "ORGANIZATION_TIMEZONE", headValue: "Asia/Dhaka" }
+  {
+    id: 1,
+    headName: "COST_CENTER_VOUCHER",
+    headValue: "Enabled", // Enables cost center tracking on vouchers
+  },
+  {
+    id: 2,
+    headName: "ORGANIZATION_NAME",
+    headValue: "Robi Corporate Hospital System",
+  },
+  {
+    id: 3,
+    headName: "ALLOW_EDIT_AFTER_APPROVE",
+    headValue: "false", // Prevent editing after approval
+  },
+  {
+    id: 4,
+    headName: "MAX_LOGIN_ATTEMPTS",
+    headValue: "3", // Max login attempts before account lock
+  },
+  {
+    id: 5,
+    headName: "ENABLE_EMAIL_NOTIFICATION",
+    headValue: "true", // Enable system-wide email alerts
+  },
+  {
+    id: 6,
+    headName: "PAYROLL_CYCLE",
+    headValue: "Monthly", // Defines payroll frequency
+  },
+  {
+    id: 7,
+    headName: "DEFAULT_CURRENCY",
+    headValue: "BDT", // Bangladesh Taka as default currency
+  },
+  {
+    id: 8,
+    headName: "ORGANIZATION_TIMEZONE",
+    headValue: "Asia/Dhaka", // For consistent timestamping
+  },
+  {
+    id: 9,
+    headName: "ENABLE_SMS_REMINDERS",
+    headValue: "true", // For appointment and billing SMS
+  },
+  {
+    id: 10,
+    headName: "PATIENT_PORTAL_ACCESS",
+    headValue: "true", // Enable self-service portal for patients
+  },
+  {
+    id: 11,
+    headName: "MAX_FILE_UPLOAD_SIZE_MB",
+    headValue: "10", // Max allowed upload size
+  },
+  {
+    id: 12,
+    headName: "ENABLE_2FA",
+    headValue: "true", // Two-factor authentication
+  }
 ]);
+
 
 
   const fields = [

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { FiFilter, FiX } from "react-icons/fi";
-
-const DynamicTable = ({ columns, data, onCellClick, filters = [] }) => {
+const DynamicTable = ({ columns = [], data = [], onCellClick, filters = [] }) => {
   const [search, setSearch] = useState("");
   const [activeFilters, setActiveFilters] = useState({});
   const handleFilterChange = (key, value) => {
@@ -84,5 +83,4 @@ const DynamicTable = ({ columns, data, onCellClick, filters = [] }) => {
     </div>
   );
 };
-
 export default DynamicTable;

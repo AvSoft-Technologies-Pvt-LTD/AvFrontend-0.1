@@ -1,11 +1,5 @@
-;import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-  Outlet,
-} from "react-router-dom";
+import React from "react";
+import {BrowserRouter as Router,Routes,Route,Navigate,Outlet,} from "react-router-dom";
 // Public Pages
 import Login from "./form/Login";
 import RegisterSelect from "./form/RegisterSelect";
@@ -14,24 +8,23 @@ import Verification from "./form/Verification";
 import Healthcard from "./components/Healthcard";
 import BookApp from "./components/BookApp";
 import Home from "./pages/Home";
-// Dashboard Layout
 import DashboardLayout from "./pages/layouts/DashboardLayout";
 import Overview from "./pages/layouts/menu/DoctorDashboard/Overview";
 import LabRoutes from "./pages/layouts/menu/LabDashboard/Ldroutes";
 import Dashboard from "./pages/layouts/menu/LabDashboard/LabDashboard";
-// Hospital Routing
 import HospitalRoutes from "./pages/layouts/menu/HospitalDashboard/Hdroutes";
 import AdminRoutes from "./pages/layouts/menu/SuperAdminDashboard/AdminRoute";
 import AdminDashboard from "./pages/layouts/menu/SuperAdminDashboard/Dashboard";
 import HospitalDashboard from "./pages/layouts/menu/HospitalDashboard/Dashboard";
 import DrRoutes from "./pages/layouts/menu/DoctorDashboard/DrRoutes";
-// Simulated localStorage-based auth
-const getUser  = () => {
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+const getUser = () => {
   const user = localStorage.getItem("user");
   return user ? JSON.parse(user) : null;
 };
 const PrivateRoute = ({ allowedType }) => {
-  const user = getUser ();
+  const user = getUser();
   if (!user) return <Navigate to="/login" />;
   if (allowedType && user.userType !== allowedType) {
     return <Navigate to="/redirect" />;
@@ -39,7 +32,7 @@ const PrivateRoute = ({ allowedType }) => {
   return <Outlet />;
 };
 const RoleRedirect = () => {
-  const user = getUser ();
+  const user = getUser();
   if (!user) return <Navigate to="/login" />;
   switch (user.userType) {
     case "doctor":
@@ -50,8 +43,8 @@ const RoleRedirect = () => {
       return <Navigate to="/hospitaldashboard" />;
     case "freelancer":
       return <Navigate to="/freelancerdashboard" />;
-      case "superadmin":
-        return <Navigate to="/superadmindashboard" />;
+    case "superadmin":
+      return <Navigate to="/superadmindashboard" />;
     default:
       return <Navigate to="/" />;
   }
@@ -87,20 +80,22 @@ const App = () => {
         {/* Hospital Dashboard */}
         <Route element={<PrivateRoute allowedType="hospital" />}>
           <Route path="/hospitaldashboard" element={<DashboardLayout />}>
-            <Route index element={<HospitalDashboard/>} />
+            <Route index element={<HospitalDashboard />} />
             <Route path="*" element={<HospitalRoutes />} />
           </Route>
         </Route>
         <Route element={<PrivateRoute allowedType="superadmin" />}>
-  <Route path="/superadmindashboard" element={<DashboardLayout />}>
-    <Route index element={<AdminDashboard/>} />
-    <Route path="*" element={<AdminRoutes />} />
-  </Route>
-</Route>
+          <Route path="/superadmindashboard" element={<DashboardLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="*" element={<AdminRoutes />} />
+          </Route>
+        </Route>
         {/* Catch All */}
-        <Route path="*" element ={<Navigate to="/" />} />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
+      <ToastContainer position="top-right" autoClose={3000} />
     </Router>
   );
 };
 export default App;
+

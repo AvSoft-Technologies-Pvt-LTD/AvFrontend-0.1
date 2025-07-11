@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Plus, Edit, Trash2, User, Building, Award } from "lucide-react";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import ReusableModal from "../../../../components/microcomponents/Modal";
 import DynamicTable from "../../../../components/microcomponents/DynamicTable";
 import cardiodoc from "../../../../assets/cardiodoc.jpg";
@@ -13,9 +14,9 @@ const employeeFilters = [
     key: "combinedFilter",
     label: "Filter",
     options: [
-      ...["Active", "Inactive"].map(status => ({ value: status, label: `Status: ${status}` })),
-      ...["Cardiology", "Medicine", "Surgery"].map(dep => ({ value: dep, label: `Department: ${dep}` })),
-      ...["Professor & Doctor", "Doctor", "Consultant"].map(des => ({ value: des, label: `Designation: ${des}` }))
+      // ...["Active", "Inactive"].map(status => ({ value: status, label: `Status: ${status}` })),
+      ...["Cardiology", "Medicine", "Surgery"].map(dep => ({ value: dep, label: ` ${dep}` })),
+      // ...["Professor & Doctor", "Doctor", "Consultant"].map(des => ({ value: des, label: `Designation: ${des}` }))
     ]
   }
 ];
@@ -167,22 +168,23 @@ const handleSave = (formData) => {
 
   const employeeColumns = [
     { header: "EID", accessor: "empId" },
-    { 
-      header: "Employee Name", 
-      accessor: "name", 
-      clickable: true, // Make clickable
-      cell: (row) => (
-        <button
-          type="button"
-          className="text-green-700 font-semibold hover:text-green-900 underline cursor-pointer"
-          style={{ textDecorationThickness: 2 }}
-          onClick={() => openModal("viewProfile", "employee", row)}
-          title="View Employee"
-        >
-          {row.name}
-        </button>
-      )
-    },
+    {
+  header: "Employee Name",
+  accessor: "name",
+  clickable: true,
+  cell: (row) => (
+    <button
+      type="button"
+      className="text-[var(--primary-color)] hover:text-[var(--accent-color)] underline cursor-pointer"
+      style={{ textDecorationThickness: 2 }}
+      onClick={() => openModal("viewProfile", "employee", row)}
+      title="View Employee"
+    >
+      {row.name}
+    </button>
+  ),
+},
+
     { header: "Department", accessor: "department" },
     { header: "Designation", accessor: "designation" },
     { 
@@ -191,7 +193,7 @@ const handleSave = (formData) => {
       cell: (row) => {
         const key = row.status ? row.status.toLowerCase() : "";
         return (
-          <span className={`px-2 py-1 rounded-full text-xs font-semibold ${statusColors[key] || "text-gray-600 bg-gray-100"}`}>
+          <span className={`px-2 py-1 rounded-full text-xs  ${statusColors[key] || "text-gray-600 bg-gray-100"}`}>
             {key.toUpperCase()}
           </span>
         );
@@ -239,14 +241,14 @@ const handleSave = (formData) => {
             className="edit-btn flex items-center justify-center hover:bg-blue-100 rounded p-1 transition hover:animate-bounce"
             title="Edit"
           >
-            <Edit size={16} />
+            <FaEdit size={16} />
           </button>
           <button
             onClick={() => { setDeleteModalOpen(true); setDeleteId(row.id); }}
             className="delete-btn flex items-center justify-center hover:bg-red-100 rounded p-1 transition hover:animate-bounce"
             title="Delete"
           >
-            <Trash2 size={16} />
+            <FaTrash size={16} />
           </button>
         </div>
       )
@@ -340,33 +342,9 @@ const handleSave = (formData) => {
 
   return (
     <div className="space-y-6">
-      {/* Tabs */}
-      {/* <div className="flex gap-2 mb-6">
-        <button
-          className={`btn w-56 h-12 flex items-center gap-2 justify-center transition-all duration-200 btn-primary scale-105 shadow-lg`}
-          type="button"
-        >
-          Employee List
-        </button>
-      </div> */}
-      {/* Quick Actions */}
-      <div className="flex gap-4 mb-6 justify-between items-center">
-        <div className="flex gap-4">
-          <button
-            onClick={() => openModal("add", "department")}
-            className="btn-secondary"
-          >
-            <Building size={16} />
-            Add Department
-          </button>
-          <button
-            onClick={() => openModal("add", "designation")}
-            className="btn-secondary"
-          >
-            <Award size={16} />
-            Add Designation
-          </button>
-        </div>
+ 
+      <div className="flex justify-between items-center mb-6">
+      <h1 className="h4-heading">Employee List</h1>
         <button
           onClick={() => openModal("add", "employee")}
           className="btn btn-primary"

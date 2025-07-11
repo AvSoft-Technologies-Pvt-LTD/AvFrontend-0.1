@@ -199,10 +199,10 @@ export default function MedicineTemplateList() {
             header: 'Actions', accessor: 'actions',
             cell: (row) => (
               <div className="flex space-x-2">
-                <button onClick={() => openModal('edit', row)} className="edit-btn hover:bg-[var(--accent-color)]-100 rounded p-1">
+                <button onClick={() => openModal('edit', row)} className="edit-btn hover:bg-blue-100 rounded p-1 transition hover:animate-bounce">
                   <FaEdit className="text-[--primary-color]" />
                 </button>
-                <button onClick={() => openModal('confirmDelete', row)} className="delete-btn hover:bg-red-100 rounded p-1">
+                <button onClick={() => openModal('confirmDelete', row)} className="delete-btn hover:bg-blue-100 rounded p-1 transition hover:animate-bounce">
                   <FaTrash className="text-red-500" />
                 </button>
               </div>

@@ -85,7 +85,7 @@ const Settings = () => {
           path=""
           element={
             <>
-              <h1 className="h2-heading mb-4" style={{ fontFamily: 'var(--font-family)' }}>
+              <h1 className="h3-heading mb-4" style={{ fontFamily: 'var(--font-family)' }}>
                 Settings
               </h1>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

@@ -199,13 +199,13 @@ const viewFields = productPackageFields.map((f, idx) => ({
               <div className="flex space-x-2">
                 <button
                   onClick={() => handleEdit(r)}
-                  className="edit-btn hover:animate-bounce"
+                  className="edit-btn rounded p-1 transition  hover:animate-bounce"
                 >
                   <FaEdit />
                 </button>
                 <button
                   onClick={() => handleOpenDelete(r)}
-                  className="delete-btn hover:animate-bounce"
+                  className="delete-btn rounded p-1 transition  hover:animate-bounce"
                 >
                   <FaTrash />
                 </button>

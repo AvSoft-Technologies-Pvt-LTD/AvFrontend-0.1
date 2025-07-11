@@ -93,8 +93,8 @@ const SupplierPage = () => {
             header: "Actions", accessor: "actions",
             cell: row => (
               <div className="flex space-x-2">
-                <button onClick={() => handleEdit(row)} className="edit-btn hover:animate-bounce"><FaEdit /></button>
-                <button onClick={() => handleOpenDelete(row)} className="delete-btn hover:animate-bounce"><FaTrash /></button>
+                <button onClick={() => handleEdit(row)} className="edit-btn rounded p-1 transition  hover:animate-bounce"><FaEdit /></button>
+                <button onClick={() => handleOpenDelete(row)} className="delete-btn rounded p-1 transition  hover:animate-bounce"><FaTrash /></button>
               </div>
             )
           }

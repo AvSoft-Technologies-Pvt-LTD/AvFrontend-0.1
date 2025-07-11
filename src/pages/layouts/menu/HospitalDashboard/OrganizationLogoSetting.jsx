@@ -23,7 +23,7 @@ const OrganizationLogo = () => {
     address:
       "58/10, 5th floor, Free School Street, Panthapath, Kalabagan, Dhaka, Dhaka 1205",
     businessNature: "Healthcare",
-    isActive: "Y",
+    isActive: "active",
     picture: logo, // assigned imported logo image
     orgType: "Hospital",
   },
@@ -34,7 +34,7 @@ const OrganizationLogo = () => {
     contactInfo: "9876543210",
     address: "Plot 23, Sector 18, Noida, Uttar Pradesh, 201301",
     businessNature: "Healthcare",
-    isActive: "Y",
+    isActive: "active",
     picture:
       "https://upload.wikimedia.org/wikipedia/en/4/4e/Apollo_Hospitals_Logo.png",
     orgType: "Clinic",
@@ -46,7 +46,7 @@ const OrganizationLogo = () => {
     contactInfo: "8801777777777",
     address: "32 Green Road, Dhanmondi, Dhaka 1205",
     businessNature: "Healthcare",
-    isActive: "N",
+    isActive: "inactive",
     picture:
       "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Robi_Axiata_Limited_Logo.svg/512px-Robi_Axiata_Limited_Logo.svg.png",
     orgType: "Hospital",
@@ -79,9 +79,9 @@ const OrganizationLogo = () => {
       header: "Status",
       accessor: "isActive",
       cell: (row) => {
-        const statusLabel = row.isActive === "Y" ? "Active" : "Inactive";
+        const statusLabel = row.isActive === "active" ? "Active" : "Inactive";
         const statusClass =
-          row.isActive === "Y" ? statusColors.active : statusColors.inactive;
+          row.isActive === "active" ? statusColors.active : statusColors.inactive;
         return (
           <span
             className={`px-2 py-1 rounded-full text-sm font-medium ${statusClass}`}

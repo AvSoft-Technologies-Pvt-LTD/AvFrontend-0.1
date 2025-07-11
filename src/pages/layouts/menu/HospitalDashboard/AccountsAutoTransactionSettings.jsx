@@ -6,8 +6,8 @@ import DynamicTable from "../../../../components/microcomponents/DynamicTable";
 import ReusableModal from "../../../../components/microcomponents/Modal";
 
 const statusColors = {
-  OK: "text-green-600 bg-green-100",
-  X: "text-red-600 bg-red-100",
+  Active: "text-green-600 bg-green-100",
+ Inactive: "text-red-600 bg-red-100",
 };
 
 const AccountHeadMapping = () => {
@@ -21,7 +21,7 @@ const AccountHeadMapping = () => {
     id: 1,
     paramName: "TRD_AF_ASSET",
     description: "Assets",
-    status: "OK",
+    status: "Active",
     accountHead: "Asset (1000)",
     tag: "Accounts",
   },
@@ -29,7 +29,7 @@ const AccountHeadMapping = () => {
     id: 2,
     paramName: "CONSULTANT_BILL",
     description: "Consultant Fees",
-    status: "X",
+    status: "Inactive",
     accountHead: "Consultant Bill (3105)",
     tag: "Hospital",
   },
@@ -37,7 +37,7 @@ const AccountHeadMapping = () => {
     id: 3,
     paramName: "TRD_AF_LIABILITY",
     description: "Liabilities",
-    status: "OK",
+    status: "Active",
     accountHead: "Liability (2000)",
     tag: "Accounts",
   },
@@ -45,7 +45,7 @@ const AccountHeadMapping = () => {
     id: 4,
     paramName: "PHARMACY_SALES",
     description: "Pharmacy Sales",
-    status: "OK",
+    status: "Active",
     accountHead: "Sales (4100)",
     tag: "Pharmacy",
   },
@@ -53,7 +53,7 @@ const AccountHeadMapping = () => {
     id: 5,
     paramName: "LAB_TEST_FEES",
     description: "Laboratory Test Fees",
-    status: "X",
+    status: "Inactive",
     accountHead: "Lab Income (3200)",
     tag: "Lab",
   },
@@ -61,7 +61,7 @@ const AccountHeadMapping = () => {
     id: 6,
     paramName: "IPD_SERVICE",
     description: "IPD Service Charges",
-    status: "OK",
+    status: "Active",
     accountHead: "IPD Income (3300)",
     tag: "Hospital",
   },
@@ -69,7 +69,7 @@ const AccountHeadMapping = () => {
     id: 7,
     paramName: "OPD_SERVICE",
     description: "OPD Service Charges",
-    status: "OK",
+    status: "Active",
     accountHead: "OPD Income (3400)",
     tag: "Hospital",
   },
@@ -77,7 +77,7 @@ const AccountHeadMapping = () => {
     id: 8,
     paramName: "ADMIN_EXPENSE",
     description: "Administrative Expenses",
-    status: "X",
+    status: "Inactive",
     accountHead: "Expenses (5100)",
     tag: "Accounts",
   }
@@ -102,7 +102,7 @@ const AccountHeadMapping = () => {
       name: "status",
       label: "Status",
       type: "select",
-      options: ["OK", "X"].map(v => ({ value: v, label: v })),
+      options: ["Active", "X"].map(v => ({ value: v, label: v })),
     },
     {
       name: "accountHead",
@@ -130,7 +130,7 @@ const AccountHeadMapping = () => {
       accessor: "status",
       cell: (row) => (
         <span
-          className={`px-2 py-1 rounded-full text-sm font-medium ${statusColors[row.status] || "bg-gray-200 text-gray-700"
+          className={`px-2 py-1 rounded-full text-xs font-semibold ${statusColors[row.status] || "bg-gray-200 text-gray-700"
             }`}
         >
           {row.status}

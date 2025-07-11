@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Plus, Edit, Trash2, Key } from "lucide-react";
+import { Key } from "lucide-react";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import ReusableModal from "../../../../components/microcomponents/Modal";
 import DynamicTable from "../../../../components/microcomponents/DynamicTable";
 
@@ -134,17 +135,19 @@ const initialUsers = [
 const userFilters = [
   {
     key: "combinedFilter",
-    label: "Filter",
-    options: userFields
-      .filter(f => f.type === "select")
-      .flatMap(f =>
-        f.options.map(opt => ({
-          value: opt.value,
-          label: opt.label
-        }))
-      )
-  }
+    label: "Role",
+    options: [
+      { value: "Doctor", label: "Doctor" },
+      { value: "Head Nurse", label: "Head Nurse" },
+      { value: "Nurse", label: "Nurse" },
+      { value: "Lab Technician", label: "Lab Technician" },
+      { value: "Receptionist", label: "Receptionist" },
+      { value: "Admin", label: "Admin" },
+      { value: "Pharmacist", label: "Pharmacist" },
+    ],
+  },
 ];
+
 
 // Add statusColors mapping for badge styling
 const statusColors = {
@@ -262,24 +265,35 @@ const SecuritySettings = () => {
   };
 
   const usersColumns = [
-    {
-      header: "Emp ID",
-      accessor: "empId",
-      cell: (row) => (
-        <button type="button" className="text-[var(--primary-color)] font-semibold hover:text-[var(--accent-color)]" onClick={() => openModal("viewProfile", row)} title="View Details">
-          {row.empId}
-        </button>
-      ),
-    },
-    {
-      header: "Full Name",
-      accessor: "fullName",
-      cell: (row) => (
-        <button type="button" className="text-[var(--primary-color)] font-semibold hover:text-[var(--accent-color)]" onClick={() => openModal("viewProfile", row)} title="View Details">
-          {row.fullName}
-        </button>
-      ),
-    },
+   {
+  header: "Emp ID",
+  accessor: "empId",
+  cell: (row) => (
+    <button
+      type="button"
+      className="text-[var(--primary-color)] hover:text-[var(--accent-color)] underline cursor-pointer"
+      onClick={() => openModal("viewProfile", row)}
+      title="View Details"
+    >
+      {row.empId}
+    </button>
+  ),
+},
+{
+  header: "Full Name",
+  accessor: "fullName",
+  cell: (row) => (
+    <button
+      type="button"
+      className="text-[var(--primary-color)]  hover:text-[var(--accent-color)] underline cursor-pointer"
+      onClick={() => openModal("viewProfile", row)}
+      title="View Details"
+    >
+      {row.fullName}
+    </button>
+  ),
+},
+
     {
       header: "Role",
       accessor: "role",
@@ -304,7 +318,7 @@ const SecuritySettings = () => {
       cell: (row) => {
         const statusKey = row.isActive ? "active" : "inactive";
         return (
-          <span className={`px-2 py-1 rounded-full text-xs font-semibold ${statusColors[statusKey]}`}>
+          <span className={`px-2 py-1 rounded-full text-xs  ${statusColors[statusKey]}`}>
             {statusKey.toUpperCase()}
           </span>
         );
@@ -319,14 +333,14 @@ const SecuritySettings = () => {
       accessor: "actions",
       cell: (row) => (
         <div className="flex gap-2">
-          <button onClick={() => openModal("edit", row)} className="edit-btn" title="Edit User">
-            <Edit size={16} />
+          <button onClick={() => openModal("edit", row)} className="edit-btn hover:bg-blue-100 rounded p-1 transition hover:animate-bounce" title="Edit User">
+            <FaEdit size={16} />
           </button>
-          <button onClick={() => openPasswordModal(row)} className="px-3 py-1 border border-orange-500 text-orange-500 rounded-md hover:bg-orange-50" title="Change Password">
+          <button onClick={() => openPasswordModal(row)} className="view-btn hover:bg-blue-100 rounded p-1 transition hover:animate-bounce" title="Change Password">
             <Key size={16} />
           </button>
-          <button onClick={() => openModal("confirmDelete", row)} className="delete-btn" title="Delete User">
-            <Trash2 size={16} />
+          <button onClick={() => openModal("confirmDelete", row)} className="delete-btn  hover:bg-blue-100 rounded p-1 transition hover:animate-bounce" title="Delete User">
+            <FaTrash size={16} />
           </button>
         </div>
       ),
@@ -335,12 +349,15 @@ const SecuritySettings = () => {
 
   return (
     <div>
-      <div className="max-w-6xl mx-auto">
-        <div className="flex justify-end items-center mb-6">
-          <button onClick={() => openModal("add")} className="btn btn-primary flex items-center gap-2">
-            <Plus size={20} /> Create New User
-          </button>
-        </div>
+      <div className="max-w-6xl ">
+        
+        <div className="flex justify-between items-center mb-6">
+  <h1 className="h4-heading">Security Settings</h1>
+  {/* <button onClick={() => openModal("add")} className="btn btn-primary flex items-center gap-2">
+    <Plus size={20} /> Create New User
+  </button> */}
+</div>
+
 
         <div>
           <DynamicTable columns={usersColumns} data={users} filters={userFilters} />

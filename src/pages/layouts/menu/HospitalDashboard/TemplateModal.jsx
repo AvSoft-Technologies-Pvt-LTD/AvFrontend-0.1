@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { X, Printer, Download, FileText, User } from "lucide-react";
+import { X, Printer, FileText, User } from "lucide-react";
 
 const InfoRow = ({ label, value }) => (
   <div className="flex justify-between">
@@ -13,20 +13,6 @@ const TemplateModal = ({ isOpen, onClose, template }) => {
   if (!isOpen || !template) return null;
 
   const handlePrint = () => window.print();
-  const handleDownload = () => {
-    const element = document.createElement("a");
-    const file = new Blob([`Lab Report Template: ${template.templateTitle}`], {
-      type: "text/plain",
-    });
-    element.href = URL.createObjectURL(file);
-    element.download = `${template.templateTitle.replace(
-      /\s+/g,
-      "_"
-    )}_template.txt`;
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-  };
 
   const testRows = (test) => [
     test === "Hemoglobin"
@@ -68,12 +54,12 @@ const TemplateModal = ({ isOpen, onClose, template }) => {
         className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-xl bg-white shadow-2xl"
       >
         {/* Header */}
-        <div className="sticky top-0 z-10 flex items-center justify-between bg-[var(--primary-color)] px-6 py-4 text-white">
+        <div className="sticky top-0 z-10 flex items-center justify-between bg-[var(--primary-color)] px-6 py-4 text-white print:text-white print:px-6 print:py-4 print:flex print:items-center print:justify-between" style={{ backgroundColor: template.headerColor, printColorAdjust: 'exact' }}>
           <div className="flex items-center gap-3">
             <FileText size={24} />
             <h2 className="text-xl font-semibold">Template Preview</h2>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 no-print">
             <button
               onClick={handlePrint}
               className="flex items-center gap-2 rounded-lg bg-white/20 px-3 py-2 text-white hover:bg-white/30 transition-colors"
@@ -81,14 +67,6 @@ const TemplateModal = ({ isOpen, onClose, template }) => {
             >
               <Printer size={16} />
               Print
-            </button>
-            <button
-              onClick={handleDownload}
-              className="flex items-center gap-2 rounded-lg bg-white/20 px-3 py-2 text-white hover:bg-white/30 transition-colors"
-              title="Download Template"
-            >
-              <Download size={16} />
-              Download
             </button>
             <button
               onClick={onClose}
@@ -252,7 +230,7 @@ const TemplateModal = ({ isOpen, onClose, template }) => {
               </div>
             </div>
             {/* Disclaimer */}
-            <div
+            {/* <div
               className="px-6 py-4 text-center text-white"
               style={{ backgroundColor: template.headerColor }}
             >
@@ -260,7 +238,7 @@ const TemplateModal = ({ isOpen, onClose, template }) => {
                 This report is computer-generated and does not require a
                 physical signature. For queries, contact {template.labContact}
               </p>
-            </div>
+            </div> */}
           </div>
         </div>
       </motion.div>
