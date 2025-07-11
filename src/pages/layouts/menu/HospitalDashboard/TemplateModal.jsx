@@ -223,6 +223,14 @@ const TemplateModal = ({ isOpen, onClose, template }) => {
                   </p>
                   <p className="text-xs text-gray-600">MD Pathology</p>
                   <p className="text-xs text-gray-600">License: MD-PATH-2024</p>
+                  {/* Doctor Signature Image */}
+                  {template.drSignUrl && (
+                    <img
+                      src={template.drSignUrl}
+                      alt="Doctor Signature"
+                      className="h-12 w-auto mt-2 object-contain"
+                    />
+                  )}
                 </div>
                 <div className="mt-4 border-t border-gray-300 pt-2">
                   <p className="text-xs text-gray-500">Digital Signature</p>

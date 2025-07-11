@@ -131,11 +131,11 @@ const ReusableModal = ({
               )}
               {mode === "confirmDelete" && (<p className="text-gray-700">Are you sure you want to delete this record?</p>)}
             </div>
-            <div className=" mb-12 flex justify-end gap-3 px-6 py-4 ">
-            <button onClick={onClose} className="delete-btn">{cancelLabel || "Cancel"}</button>
-            {["add", "edit"].includes(mode) && (<button onClick={handleSave} className="view-btn">{saveLabel || (mode === "edit" ? "Update" : "Save")}</button>)}
-            {mode === "confirmDelete" && (<button onClick={handleDelete} className="edit-btn">{deleteLabel || "Yes, Delete"}</button>)}
-          </div>
+         <div className=" flex justify-end gap-3 px-6 py-4">
+              {mode !== "viewProfile" && <button onClick={onClose} className="delete-btn">{cancelLabel || "Cancel"}</button>}
+              {["add", "edit"].includes(mode) && <button onClick={handleSave} className="view-btn">{saveLabel || (mode === "edit" ? "Update" : "Save")}</button>}
+              {mode === "confirmDelete" && <button onClick={handleDelete} className="edit-btn">{deleteLabel || "Yes, Delete"}</button>}
+            </div>
         </div>
           </div>
         {showPreviewModal && previewFile && (

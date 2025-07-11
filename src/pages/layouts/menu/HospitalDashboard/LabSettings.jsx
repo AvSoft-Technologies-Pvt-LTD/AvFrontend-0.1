@@ -14,6 +14,8 @@ import DynamicTable from "../../../../components/microcomponents/DynamicTable";
 import TemplateModal from "./TemplateModal";
 import SignatureCanvas from "react-signature-canvas";
 import { Save, X as XIcon } from "lucide-react";
+import doctorsign1 from "../../../../assets/doctorsign1.png";
+import doctorsign2 from "../../../../assets/doctorsign2.jpg";
 
 const LabSettings = () => {
   // Group all state and handlers in a custom hook for brevity
@@ -112,6 +114,7 @@ const LabSettings = () => {
         headerColor: "#0E1630",
         logoUrl:
           "https://images.pexels.com/photos/40568/medical-appointment-doctor-healthcare-40568.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=1",
+        drSignUrl: doctorsign1,
       },
       {
         id: 2,
@@ -126,6 +129,7 @@ const LabSettings = () => {
         headerColor: "#01D48C",
         logoUrl:
           "https://images.pexels.com/photos/3786132/pexels-photo-3786132.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=1",
+        drSignUrl: doctorsign2,
       },
     ]);
 
@@ -441,6 +445,10 @@ const LabSettings = () => {
       updatedFormData.logoUrl = URL.createObjectURL(formData.logoFile);
     }
   }
+  // Handle doctor signature upload
+  if (activeTab === "create-templates" && formData["Dr Sign"] instanceof File) {
+    updatedFormData.drSignUrl = URL.createObjectURL(formData["Dr Sign"]);
+  }
 
   if (activeTab === "lab-items") {
     modalState.mode === "add"
@@ -481,7 +489,6 @@ const LabSettings = () => {
         );
   }
 
-  // ✅ Use the correct function to close the modal
   closeModal();
 };
 
